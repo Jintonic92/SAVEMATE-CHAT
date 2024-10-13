@@ -1,8 +1,8 @@
 import os
 import streamlit as st
-from io import StringIO
-import re
-import sys
+#from io import StringIO
+#import re
+#import sys
 from modules.history import ChatHistory
 from modules.layout import Layout
 from modules.utils import Utilities
@@ -43,6 +43,11 @@ Sidebar.get_product_type() # 진행 전 사이드바에서 유저 ID를 가져�
 
 user_api_key = utils.load_api_key()
 
+# 2024-10-13
+# 초기화 전에 user_message를 session_state에 저장
+if "user_message" not in st.session_state:
+    st.session_state["user_message"] = None
+
 if not user_api_key:
     layout.show_api_key_missing()
 else:
@@ -53,6 +58,9 @@ else:
     # 종료 등 할 때 사용하기
     chat_flag = True
 
+    # 2024-10-13
+    user_message = st.session_state["user_message"]
+
     if chat_flag:
 
         # 사이드바 구성 설정
@@ -62,10 +70,15 @@ else:
         # 채팅 기록 초기화
         history = ChatHistory()
         try:
-            print('try to set up chatbot')
+            # 2024-10-13 수정
+            # 매번 챗봇 초기화하는 것은 비효율적임
+            if "chatbot" not in st.session_state:
+                print('try to set up chatbot')
 
-            chatbot = utils.setup_chatbot() # 챗봇 초기화 및 설정
-            st.session_state["chatbot"] = chatbot # 세션 상태에 챗봇 저장
+                chatbot = utils.setup_chatbot() # 챗봇 초기화 및 설정
+                st.session_state["chatbot"] = chatbot # 세션 상태에 챗봇 저장
+            else:
+                chatbot = st.session_state["chatbot"]
 
             if st.session_state["ready"]:
                 # 채팅 응답 및 사용자 입력을 표시할 컨테이너 생성
@@ -76,8 +89,22 @@ else:
                 with prompt_container:
 
                     # 프롬프트 폼 표시: 사용자 입력 및 제출 버튼 생성
-                    is_ready, user_input = layout.prompt_form()
-                    history.initialize("topic")
+                    #is_ready, user_input = layout.prompt_form()
+                    #history.initialize("topic")
+
+                    # 2024-10-13
+                    if user_message:
+                        print("user messgae 있음")
+                        layout.prompt_form_2()
+                        is_ready = True
+                        user_input = "적금 상품을 하나만 추천해주세요."
+                        user_message = None # 다시 초기화
+                    else :
+                        print("no user message")
+                        is_ready, user_input = layout.prompt_form()
+                        history.initialize("topic")
+
+
 
                     # 채팅 리셋 버튼이 눌리면 기록을 초기화
                     if st.session_state["reset_chat"]:
@@ -115,6 +142,7 @@ else:
                         context = st.session_state["chatbot"].retrieve_documents(query)
 
                         # 이전 채팅 기록 가져오기
+                        # 이거 안쓰는 것 같음?
                         chat_history = st.session_state.get("history", [])
 
                         # 챗봇이 응답을 생성 (질문, 문맥, 이전 대화 기록, 유저 ID, 금융상품 타입 사용)
@@ -127,9 +155,22 @@ else:
                         # 어시스턴트 응답을 채팅 기록에 추가
                         history.append("assistant", output)
 
+                        # 여기에서 생성된 버튼의 클릭을 처리 2024-10-12
+                        ### 상품 정보를 간단하게 처리하고 싶음
+                        if st.session_state.get("product_button_click"):
+                            # 사용자가 상품 버튼을 클릭한 경우, 자동으로 메시지 추가
+                            print("상품 정보 확인 버튼")
+                            history.append("user", st.session_state["product_button_click"])
+                            st.session_state["product_button_click"] = None  # 상태를 초기화
 
                 # 생성된 메시지를 화면에 표시
-                history.generate_messages(response_container)
+                user_message = history.generate_messages(response_container)
+
+                if user_message: # None이 아닌 경우에만 실행
+                    print("user_message:", user_message)
+                    # history.append("user", user_message) # 유저 입력을 기록에 추가
+                    st.session_state["user_message"] = user_message
+
         except Exception as e:
             # 예외가 발생할 경우 에러 메시지 표시
             st.error(f"Error: {str(e)}")
