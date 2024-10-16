@@ -37,8 +37,8 @@ class ChatHistory:
             # 3. 금융 정보 질의응답 기능
         # 질문 에시와 대화 가이드라인 
 
-        #image_path = "./src/modules/img_folder/free-icon-golden-retriever-5374233.png"
-        image_path = "./src/modules/img_folder/how_to_chat.png"
+        image_path = "./src/modules/img_folder/free-icon-golden-retriever-5374233.png"
+        #image_path = "./src/modules/img_folder/how_to_chat.png"
         encoded_image = self.image_to_base64(image_path)
 
         prompt_text =  f"""사이드바에서 유저아이디/금융상품종류를 입력해주세요. 입력하지 않으면 게스트모드/일반채팅모드로 실행이 됩니다.
@@ -46,9 +46,8 @@ class ChatHistory:
         정확한 정보를 안내해 드리기 위해 열심히 학습하고 있지만, 가끔은 실수를 할 수도 있습니다. 
         현재 상담 시점에서 충족하시는 조건을 고려해 상품을 안내드리고 있어요. 저와 상담하신 후에 충족되는 조건은 고려할 수 없습니다. 
 
-        <br><br>
-        <img src="data:image/png;base64,{encoded_image}" alt="Financial Image" style="width:150px;"><br>
-        가이드라인을 참고하세요.<br><br>
+        
+        가이드라인을 참고하세요.
 
         [마이데이터 기반 예금/적금상품 추천 기능]
         1. 유저아이디를 사이드바에서 입력하세요. 
