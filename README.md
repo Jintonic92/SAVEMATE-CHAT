@@ -14,6 +14,11 @@
 여러 금융기관의 상품을 통합적으로 관리하는 마이데이터 DB와 사용자의 입력에 알맞은 금융 상품을 추천하고자 한다.
 ### 프로젝트 배경
 복잡한 데이터 처리 없이 데이터로부터 필요한 정보를 ‘대화’를 통해 바로 얻어내고, 간편하게 맞춤형 상품을 추천받을 수 있다. 
+### 주요 기능
+1. 마이데이터 기반 금융 상품 제안
+2. 금융 상품 정보 제공
+3. 상품 관련 질의응답 제공
+4. 금융 지식 챗봇 기능 제공
 
 ## 설치 방법 'Running Locally 💻'
 Follow these steps to set up and run the service locally :
@@ -28,9 +33,9 @@ Clone the repository :
 `git clone https://github.com/MYUNGJULEE/SAVEMATE-CHAT`
 
 
-Navigate to the project directory :
+Navigate to the project directory (pwd하여 개인 주소창 확인후 필요시 SAVEMATE-CHAT 앞에 덧붙히기):
 
-`cd CHATBOT_BASIC`
+`cd SAVEMATE-CHAT`
 
 
 Create a virtual environment for Windows:
@@ -61,7 +66,7 @@ cat .env
 
 Launch the chat service locally (pwd코드로 로컬 주소 확인후 해당주소로 바꾼 후 실행) :
 ```bash
-streamlit run /Users/imyungju/desktop/code_sh/CHATBOT_BASIC/src/SaveMate-chat.py 
+streamlit run /Users/imyungju/desktop/SAVEMATE-CHAT/src/SaveMate-chat.py 
 ```
 
 
@@ -73,7 +78,7 @@ streamlit run /Users/imyungju/desktop/code_sh/CHATBOT_BASIC/src/SaveMate-chat.py
 
         기능별 가이드라인
         [마이데이터 기반 예금/적금상품 추천 기능]
-        1. 유저아이디를 사이드바에서 입력하세요. 
+        1. USER ID를 사이드바에서 설정해주세요. 
         2. 원하시는 금융상품을 사이드바에서 선택하세요.
         3. 채팅창에 내 계좌정보 알려줘를 입력해주세요.
         4. 이후, 원하시는 조건 + 상품 추천해줘를 입력해주세요.
@@ -84,7 +89,7 @@ streamlit run /Users/imyungju/desktop/code_sh/CHATBOT_BASIC/src/SaveMate-chat.py
         [상품정보 검색 기능]
         1. 채팅창에 원하시는 상품명 + 궁금한 내용을 입력하세요.
         2. 현재 10여개 은행의 50여개의 상품정보가 준비되어 있습니다.
-        3. 상품명 예시: 우리 SUPER주거래 정기적금, 급여하나 월복리 적금, 행복knowhow 연금예금, NH장병내일준비적금
+        3. 상품명 예시: 우리 SUPER주거래 정기적금, 행복knowhow 연금예금, NH장병내일준비적금
 
         [금융정보 기능]
         1. 궁금하신 금융정보를 채팅창에 자유롭게 물어보세요.
